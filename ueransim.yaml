@@ -1,85 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "2"
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"ueransim","namespace":"5g-lab"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"ueransim"}},"template":{"metadata":{"labels":{"app":"ueransim"}},"spec":{"containers":[{"args":["-c","/etc/ueransim/gnb.yaml"],"command":["./nr-gnb"],"image":"gradiant/ueransim:latest","name":"gnb","securityContext":{"privileged":true},"volumeMounts":[{"mountPath":"/etc/ueransim","name":"config-volume"}]},{"command":["sleep","infinity"],"image":"gradiant/ueransim:latest","name":"ue"}],"volumes":[{"configMap":{"name":"ueransim-config"},"name":"config-volume"}]}}}}
-  creationTimestamp: "2026-04-25T05:43:30Z"
-  generation: 2
   name: ueransim
   namespace: 5g-lab
-  resourceVersion: "25556"
-  uid: 13206cd4-d9cb-410f-bbc8-89e2afa9d9c0
 spec:
-  progressDeadlineSeconds: 600
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: ueransim
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
         app: ueransim
     spec:
       containers:
-      - args:
-        - -c
-        - /etc/ueransim/gnb.yaml
-        command:
-        - ./nr-gnb
+      - name: gnb
         image: herlesupreeth/ueransim:latest
-        imagePullPolicy: Always
-        name: gnb
-        resources: {}
+        command: ["./nr-gnb"]
+        args: ["-c", "/etc/ueransim/gnb.yaml"]
         securityContext:
           privileged: true
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: /etc/ueransim
-          name: config-volume
-      - command:
-        - sleep
-        - infinity
-        image: gradiant/ueransim:latest
-        imagePullPolicy: Always
-        name: ue
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
+        - name: config-volume
+          mountPath: /etc/ueransim
+      - name: ue
+        image: herlesupreeth/ueransim:latest
+        command: ["sleep", "infinity"]
       volumes:
-      - configMap:
-          defaultMode: 420
+      - name: config-volume
+        configMap:
           name: ueransim-config
-        name: config-volume
-status:
-  conditions:
-  - lastTransitionTime: "2026-04-25T05:43:30Z"
-    lastUpdateTime: "2026-04-25T05:43:30Z"
-    message: Deployment does not have minimum availability.
-    reason: MinimumReplicasUnavailable
-    status: "False"
-    type: Available
-  - lastTransitionTime: "2026-04-25T05:43:30Z"
-    lastUpdateTime: "2026-04-25T05:44:43Z"
-    message: ReplicaSet "ueransim-776995d599" is progressing.
-    reason: ReplicaSetUpdated
-    status: "True"
-    type: Progressing
-  observedGeneration: 2
-  replicas: 2
-  terminatingReplicas: 0
-  unavailableReplicas: 2
-  updatedReplicas: 1
