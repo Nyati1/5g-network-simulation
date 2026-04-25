@@ -1,29 +1,22 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: ueransim
+  name: ueransim-config
   namespace: 5g-lab
-spec:
-  replicas: 11  # Scaled for load simulation
-  selector:
-    matchLabels:
-      app: ueransim
-  template:
-    metadata:
-      labels:
-        app: ueransim
-    spec:
-      containers:
-      - name: gnb
-        image: herlesupreeth/ueransim:latest
-        command: ["./nr-gnb"]
-        args: ["-c", "/etc/ueransim/gnb.yaml"]
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: config-volume
-          mountPath: /etc/ueransim
-      volumes:
-      - name: config-volume
-        configMap:
-          name: ueransim-config
+data:
+  gnb.yaml: |
+    mcc: '001'
+    mnc: '01'
+    nci: '0x00000001'
+    idLength: 32
+    tac: 1
+    linkIp: 127.0.0.1
+    ngapIp: 127.0.0.1
+    gtpuIp: 127.0.0.1
+    amfConfigs:
+      - address: my-5g-core-amf
+        port: 38412
+    slices:
+      - sst: 1
+        sd: 0x010203
+    gnbId: '0x000102'
