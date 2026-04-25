@@ -4,7 +4,7 @@ metadata:
   name: ueransim
   namespace: 5g-lab
 spec:
-  replicas: 14
+  replicas: 14  # Scaling to 14 RAN nodes (gNB + UE pairs)
   selector:
     matchLabels:
       app: ueransim
@@ -16,6 +16,7 @@ spec:
       containers:
       - name: gnb
         image: herlesupreeth/ueransim:latest
+        imagePullPolicy: IfNotPresent
         command: ["./nr-gnb"]
         args: ["-c", "/etc/ueransim/gnb.yaml"]
         securityContext:
@@ -25,6 +26,7 @@ spec:
           mountPath: /etc/ueransim
       - name: ue
         image: herlesupreeth/ueransim:latest
+        imagePullPolicy: IfNotPresent
         command: ["sleep", "infinity"]
       volumes:
       - name: config-volume

@@ -4,7 +4,7 @@ metadata:
   name: ueransim
   namespace: 5g-lab
 spec:
-  replicas: 1
+  replicas: 11  # Scaled for load simulation
   selector:
     matchLabels:
       app: ueransim
