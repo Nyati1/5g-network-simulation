@@ -4,7 +4,7 @@ metadata:
   name: ueransim
   namespace: 5g-lab
 spec:
-  replicas: 14  # Scaling to 14 RAN nodes (gNB + UE pairs)
+  replicas: 5
   selector:
     matchLabels:
       app: ueransim
