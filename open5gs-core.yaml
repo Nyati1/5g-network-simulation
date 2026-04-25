@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-amf
+  namespace: 5g-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amf
+  template:
+    metadata:
+      labels:
+        app: amf
+    spec:
+      containers:
+      - name: amf
+        image: docker.io/gradiant/open5gs:2.7.0
+        args: ["open5gs-amfd"]
+        ports:
+        - containerPort: 38412
+          name: ngap
+          protocol: SCTP
+---
+# Repeat this structure for AUSF, NRF, UPF, etc.

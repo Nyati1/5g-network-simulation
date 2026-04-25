@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ueransim
+  namespace: 5g-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ueransim
+  template:
+    metadata:
+      labels:
+        app: ueransim
+    spec:
+      containers:
+      - name: gnb
+        image: herlesupreeth/ueransim:latest
+        command: ["./nr-gnb"]
+        args: ["-c", "/etc/ueransim/gnb.yaml"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/ueransim
+      volumes:
+      - name: config-volume
+        configMap:
+          name: ueransim-config
