@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-amf
+  namespace: 5g-lab
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: amf
+  template:
+    metadata:
+      labels:
+        app: amf
+    spec:
+      containers:
+      - name: amf
+        image: docker.io/gradiant/open5gs:2.7.0
+        args: ["open5gs-amfd"]
+        ports:
+        - containerPort: 38412
+          name: ngap
+          protocol: SCTP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-upf
+  namespace: 5g-lab
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: upf
+  template:
+    metadata:
+      labels:
+        app: upf
+    spec:
+      containers:
+      - name: upf
+        image: docker.io/gradiant/open5gs:2.7.0
+        args: ["open5gs-upfd"]
+        ports:
+        - containerPort: 2152
+          name: gtpu
+          protocol: UDP
