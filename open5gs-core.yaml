@@ -29,7 +29,7 @@ metadata:
   name: open5gs-upf
   namespace: 5g-lab
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: upf
