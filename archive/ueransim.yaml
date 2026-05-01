@@ -4,7 +4,7 @@ metadata:
   name: ueransim
   namespace: 5g-lab
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       app: ueransim
