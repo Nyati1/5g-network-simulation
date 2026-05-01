@@ -4,7 +4,7 @@ metadata:
   name: open5gs-amf
   namespace: 5g-lab
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: amf
