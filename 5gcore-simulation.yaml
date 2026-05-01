@@ -41,6 +41,8 @@ spec:
       - name: upf
         image: docker.io/gradiant/open5gs:2.7.0
         args: ["open5gs-upfd"]
+        securityContext:
+          privileged: true # This is the missing piece
         ports:
         - containerPort: 2152
           name: gtpu
